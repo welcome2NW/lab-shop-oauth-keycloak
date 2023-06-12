@@ -1,4 +1,4 @@
-server:
+server:
   port: 8088
 
 ---
@@ -9,16 +9,20 @@ keycloak-client:
   realm: master
 
 spring:
-  profiles: default
+  config:
+    activate:
+      on-profile: default
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay 
       routes:
         - id: oder
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
             - Path=/orders/** 
         - id: inventory
-          uri: http://localhost:8082
+          uri: http://localhost:8083
           predicates:
             - Path=/inventories/** 
         - id: frontend
@@ -56,7 +60,9 @@ spring:
 ---
 
 spring:
-  profiles: docker
+  config:
+    activate:
+      on-profile: docker
   security:
     oauth2:
       client:

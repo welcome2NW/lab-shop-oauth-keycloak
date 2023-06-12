@@ -6,7 +6,14 @@ spring:
 ---
 
 spring:
-  profiles: default
+  config:
+    activate:
+      on-profile: default
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9090/realms/master/protocol/openid-connect/certs
   jpa:
     properties:
       hibernate:
@@ -39,17 +46,26 @@ logging:
     org.hibernate.type: trace
     org.springframework.cloud: debug
 
-api:
-  url: localhost:8082
-
 
 server:
-  port: 8081
+  port: 8082
 
 ---
 
 spring:
-  profiles: docker
+  config:
+    activate:
+      on-profile: docker
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9090/realms/master/protocol/openid-connect/certs
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
   cloud:
     stream:
       kafka:
@@ -71,8 +87,5 @@ spring:
         event-out:
           destination: labshopoauthkeycloak
           contentType: application/json
-
-api:
-  url: inventory:8080
 
 

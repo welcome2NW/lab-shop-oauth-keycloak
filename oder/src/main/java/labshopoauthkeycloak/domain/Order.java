@@ -26,15 +26,6 @@ public class Order {
 
     @PostPersist
     public void onPostPersist() {
-        //Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
-
-        labshopoauthkeycloak.external.DecreaseStockCommand decreaseStockCommand = new labshopoauthkeycloak.external.DecreaseStockCommand();
-        // mappings goes here
-        OderApplication.applicationContext
-            .getBean(labshopoauthkeycloak.external.InventoryService.class)
-            .decreaseStock(/* get???(), */decreaseStockCommand);
-
         OrderPlaced orderPlaced = new OrderPlaced(this);
         orderPlaced.publishAfterCommit();
     }
